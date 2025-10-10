@@ -1,11 +1,15 @@
 package coconuts;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.Instant;
 import java.util.Scanner;
 
 public class Scoreboard extends VBox {
@@ -13,17 +17,45 @@ public class Scoreboard extends VBox {
     private int highScore;
     private int coconutsDestroyed;
     private int coconutsLanded;
-    private long time_in_millis;
+    private long timeInMillis;
     private int time_seconds;
+    private Label destroyedLabel;
+    private Label landedLabel;
+    private Label highScoreLabel;
+    private Label timeLabel;
+    private Instant startTime;
+    private Thread timerThread;
+    private boolean running = false;
     private final File scoreFile = new File("coconuts/Scores.txt");
 
     public Scoreboard() {
         this.coconutsDestroyed = 0;
         this.coconutsLanded = 0;
         this.highScore = loadHighScore();
-        scoreLabel = new Label("High Score: " + highScore);
+        this.timeInMillis = 0;
+        buildScoreboard();
+    }
+
+    private void buildScoreboard() {
+        destroyedLabel = new Label("Coconuts Destroyed: " + coconutsDestroyed);
+        highScoreLabel = new Label("High Score: " + highScore);
+        landedLabel = new Label("Coconuts Landed: " + coconutsLanded);
+        timeLabel = new Label("Time: 0s");
+
+        HBox topRow = new HBox(40, destroyedLabel, highScoreLabel, landedLabel);
+        topRow.setAlignment(Pos.CENTER);
+        topRow.setPadding(new Insets(10));
+
+        // Bottom row for time
+        HBox bottomRow = new HBox(timeLabel);
+        bottomRow.setAlignment(Pos.CENTER);
+        bottomRow.setPadding(new Insets(5));
+
+        // Combine into main VBox
+        this.getChildren().addAll(topRow, bottomRow);
+        this.setAlignment(Pos.CENTER);
         this.setSpacing(10);
-        this.getChildren().add(scoreLabel);
+
     }
 
     public int loadHighScore() {

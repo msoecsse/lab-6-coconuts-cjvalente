@@ -3,6 +3,7 @@ package coconuts;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -22,14 +23,23 @@ public class GameController {
     private Pane gamePane;
     @FXML
     private Pane theBeach;
+    @FXML
+    private HBox scoreboardContainer;
     private OhCoconutsGameManager theGame;
+    private Scoreboard scoreboard;
 
     @FXML
     public void initialize() {
-        theGame = new OhCoconutsGameManager((int) (gamePane.getPrefHeight() - theBeach.getPrefHeight()),
+        theGame = new OhCoconutsGameManager((int) (gamePane.getPrefHeight() - theBeach.getPrefHeight() - scoreboardContainer.getPrefHeight() / 2),
                 (int) (gamePane.getPrefWidth()), gamePane);
 
         gamePane.setFocusTraversable(true);
+        scoreboard = new Scoreboard();
+        scoreboard.setLayoutX(10);
+        scoreboard.setLayoutY(10);
+        scoreboardContainer.setPrefHeight(100);
+        scoreboardContainer.getChildren().add(scoreboard);
+
 
         coconutTimeline = new Timeline(new KeyFrame(Duration.millis(MILLISECONDS_PER_STEP), (e) -> {
             theGame.tryDropCoconut();

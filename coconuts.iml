@@ -10,6 +10,7 @@
     </content>
     <orderEntry type="jdk" jdkName="24 (2)" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="lib" level="application" />
+    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="javafx" level="application" />
   </component>
 </module>
