@@ -28,7 +28,7 @@ public class HitEvent {
             }
         } else if(updateType == 3){
             for(HitEventObservers observer : observers){
-                observer.updateCoconutDestoryed();
+                observer.updateCoconutDestroyed();
             }
         }
 

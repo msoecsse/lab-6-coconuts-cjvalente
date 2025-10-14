@@ -72,7 +72,7 @@ public class OhCoconutsGameManager {
     }
 
     public void killCrab() {
-        theCrab = null;
+        theCrab.setImage();
     }
 
     public void advanceOneTick() {

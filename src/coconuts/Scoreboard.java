@@ -61,8 +61,6 @@ public class Scoreboard extends VBox implements HitEventObservers{
         this.getChildren().addAll(topRow, bottomRow);
         this.setAlignment(Pos.CENTER);
         this.setSpacing(10);
-        startTime();
-
 
     }
 
@@ -140,7 +138,7 @@ public class Scoreboard extends VBox implements HitEventObservers{
     }
 
     @Override
-    public void updateCoconutDestoryed() {
+    public void updateCoconutDestroyed() {
 
     }
 }

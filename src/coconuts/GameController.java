@@ -1,5 +1,6 @@
 package coconuts;
 
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -8,6 +9,9 @@ import javafx.scene.layout.Pane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+
+import java.util.HashSet;
+import java.util.Set;
 
 // JavaFX Controller class for the game - generally, JavaFX elements (other than Image) should be here
 public class GameController {
@@ -27,6 +31,10 @@ public class GameController {
     private HBox scoreboardContainer;
     private OhCoconutsGameManager theGame;
     private Scoreboard scoreboard;
+
+    private final Set<KeyCode> pressedKeys = new HashSet<>();
+
+    private AnimationTimer movementTimer;
 
     @FXML
     public void initialize() {
@@ -48,22 +56,44 @@ public class GameController {
                 coconutTimeline.pause();
         }));
         coconutTimeline.setCycleCount(Timeline.INDEFINITE);
+        setupMovementHandlers();
     }
 
     @FXML
     public void onKeyPressed(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.RIGHT && !theGame.done()) {
-            theGame.getCrab().crawl(10);
-        } else if (keyEvent.getCode() == KeyCode.LEFT && !theGame.done()) {
-            theGame.getCrab().crawl(-10);
-        } else if (keyEvent.getCode() == KeyCode.SPACE) {
+        if (keyEvent.getCode() == KeyCode.SPACE) {
             if (!started) {
                 coconutTimeline.play();
                 started = true;
+                scoreboard.startTime();
             } else {
                 coconutTimeline.pause();
                 started = false;
             }
         }
+    }
+
+    private void setupMovementHandlers() {
+        gamePane.setOnKeyPressed(e -> pressedKeys.add(e.getCode()));
+        gamePane.setOnKeyReleased(e -> pressedKeys.remove(e.getCode()));
+
+        movementTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (theGame == null || theGame.done()) {
+                    return;
+                }
+
+                Crab crab = theGame.getCrab();
+                int speed = 5;
+                if (pressedKeys.contains(KeyCode.RIGHT)) {
+                    crab.crawl(speed);
+                }
+                if (pressedKeys.contains(KeyCode.LEFT)) {
+                    crab.crawl(-speed);
+                }
+            }
+        };
+        movementTimer.start();
     }
 }

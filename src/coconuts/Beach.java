@@ -23,7 +23,7 @@ public class Beach extends IslandObject implements HitEventObservers{
     }
 
     @Override
-    public void updateCoconutDestoryed() {
+    public void updateCoconutDestroyed() {
 
     }
 }

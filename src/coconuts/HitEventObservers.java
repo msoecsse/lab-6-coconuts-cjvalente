@@ -7,7 +7,7 @@ public interface HitEventObservers {
 
     void updateCrabDies();
 
-    void updateCoconutDestoryed();
+    void updateCoconutDestroyed();
 
 
 }

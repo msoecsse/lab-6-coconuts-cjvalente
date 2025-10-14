@@ -26,7 +26,7 @@ public class Coconut extends HittableIslandObject implements HitEventObservers {
         //coconuts don't do anything
     }
 
-    public void updateCoconutDestoryed(){
+    public void updateCoconutDestroyed(){
         //coconut disappears
     }
 }

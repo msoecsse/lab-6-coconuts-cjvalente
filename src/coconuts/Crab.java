@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 // This is a domain class; other than Image, do not introduce JavaFX or other GUI components here
 public class Crab extends HittableIslandObject implements HitEventObservers{
     private static final int WIDTH = 50; // assumption: height and width are the same
-    private static final Image crabImage = new Image("file:images/crab-1.png");
+    private static Image crabImage = new Image("file:images/crab-1.png");
 
     public Crab(OhCoconutsGameManager game, int skyHeight, int islandWidth) {
         super(game, islandWidth / 2, skyHeight, WIDTH, crabImage);
@@ -41,11 +41,20 @@ public class Crab extends HittableIslandObject implements HitEventObservers{
 
     @Override
     public void updateCrabDies() {
+        System.out.println("CRAB DIES");
 
     }
 
     @Override
-    public void updateCoconutDestoryed() {
+    public void updateCoconutDestroyed() {
 
+    }
+
+    public Image getImage() {
+        return crabImage;
+    }
+
+    public void setImage() {
+        crabImage = new Image("images/coconut-tree.png");
     }
 }
