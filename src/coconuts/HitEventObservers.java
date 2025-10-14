@@ -9,5 +9,9 @@ public interface HitEventObservers {
 
     void updateCoconutDestroyed();
 
+    default boolean isObserver(){
+        return true;
+    }
+
 
 }

@@ -12,6 +12,7 @@ public class OhCoconutsGameManager {
     private final Collection<IslandObject> allObjects = new LinkedList<>();
     private final Collection<HittableIslandObject> hittableIslandSubjects = new LinkedList<>();
     private final Collection<IslandObject> scheduledForRemoval = new LinkedList<>();
+    private final HitEventSubject subject = new HitEventSubject();
     private final int height, width;
     private final int DROP_INTERVAL = 10;
     private final int MAX_TIME = 100;
@@ -43,6 +44,9 @@ public class OhCoconutsGameManager {
             HittableIslandObject asHittable = (HittableIslandObject) object;
             hittableIslandSubjects.add(asHittable);
         }
+        if(object.isObserver()){
+            subject.attach((HitEventObservers) object);
+        }
     }
 
     public int getHeight() {
@@ -67,6 +71,10 @@ public class OhCoconutsGameManager {
         gameTick++;
     }
 
+    public Beach getBeach() {
+        return theBeach;
+    }
+
     public Crab getCrab() {
         return theCrab;
     }
@@ -87,7 +95,21 @@ public class OhCoconutsGameManager {
         for (IslandObject thisObj : allObjects) {
             for (HittableIslandObject hittableObject : hittableIslandSubjects) {
                 if (thisObj.canHit(hittableObject) && thisObj.isTouching(hittableObject)) {
-                    // TODO: add code here to process the hit
+                    if(thisObj.isGround() && hittableObject.isFalling()){
+                        //isGround asks for beach and isFalling is only true for coconuts
+                        subject.coconutHitsGround();
+                        subject.detach((HitEventObservers)  hittableObject);
+                    }
+                    if(thisObj.isFalling() && (hittableObject.isGroundObject() && !hittableObject.isFalling())){
+                        //asks if thisObj is coconut and hittableObject is crab
+                        subject.crabDies();
+                        subject.detach((HitEventObservers)  hittableObject);
+                    }
+                    if(thisObj instanceof LaserBeam && hittableObject.isFalling()){
+                        //asks if thisObj is laser and hittableobject is a coconut
+                        subject.coconutDestroyed();
+                        subject.detach((HitEventObservers)  hittableObject);
+                    }
                     scheduledForRemoval.add(hittableObject);
                     gamePane.getChildren().remove(hittableObject.getImageView());
                 }

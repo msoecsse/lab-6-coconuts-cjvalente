@@ -35,6 +35,11 @@ public class Crab extends HittableIslandObject implements HitEventObservers{
     }
 
     @Override
+    public boolean isGroundObject() {
+        return true;
+    }
+
+    @Override
     public void updateCoconutHitsGround() {
 
     }

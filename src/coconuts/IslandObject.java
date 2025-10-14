@@ -38,12 +38,20 @@ public abstract class IslandObject {
         }
     }
 
+    public int getX(){
+        return x;
+    }
+
+    public int getY(){
+        return y;
+    }
+
     public boolean isHittable() {
         return false;
     }
 
     protected int hittable_height() {
-        return 0;
+        return y;
     }
 
     public boolean isGroundObject() {
@@ -55,12 +63,20 @@ public abstract class IslandObject {
     }
 
     public boolean canHit(IslandObject other) {
+        return false; //TODO update this in each class
+    }
+
+    public boolean isGround(){
         return false;
     }
 
     public boolean isTouching(IslandObject other) {
-        return false;
+        return this.y == other.y && (other.x > this.x && other.x < this.x + this.width);
     }
 
     public abstract void step();
+
+    public boolean isObserver(){
+        return false;
+    }
 }

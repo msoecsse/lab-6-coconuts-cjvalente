@@ -2,7 +2,7 @@ package coconuts;
 
 // the beach catches (hits) coconuts and increases the coconut score
 // This is a domain class; do not introduce JavaFX or other GUI components here
-public class Beach extends IslandObject implements HitEventObservers{
+public class Beach extends IslandObject {
 
     public Beach(OhCoconutsGameManager game, int skyHeight, int islandWidth) {
         super(game, 0, skyHeight, islandWidth, null);
@@ -13,17 +13,12 @@ public class Beach extends IslandObject implements HitEventObservers{
     public void step() { /* do nothing */ }
 
     @Override
-    public void updateCoconutHitsGround() {
-
+    public boolean canHit(IslandObject other) {
+        return other.isFalling();
     }
 
     @Override
-    public void updateCrabDies() {
-
-    }
-
-    @Override
-    public void updateCoconutDestroyed() {
-
+    public boolean isGround(){
+        return true;
     }
 }

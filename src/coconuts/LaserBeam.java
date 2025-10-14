@@ -22,6 +22,11 @@ public class LaserBeam extends IslandObject implements HitEventObservers{
     }
 
     @Override
+    public boolean canHit(IslandObject other) {
+        return other.isFalling();
+    }
+
+    @Override
     public void updateCoconutHitsGround() {
 
     }

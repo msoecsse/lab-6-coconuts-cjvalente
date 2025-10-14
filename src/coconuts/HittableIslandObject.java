@@ -10,6 +10,7 @@ public abstract class HittableIslandObject extends IslandObject {
         super(game, x, y, width, image);
     }
 
+    @Override
     public boolean isHittable() {
         return true;
     }
