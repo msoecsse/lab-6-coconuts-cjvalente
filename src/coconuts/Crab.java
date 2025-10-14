@@ -20,7 +20,17 @@ public class Crab extends HittableIslandObject {
 
     // Captures the crab crawling sideways
     public void crawl(int offset) {
-        x += offset;
-        display();
+        if (x < 550 && x > 5) {
+            x += offset;
+            display();
+        } else if (x <= 5) {
+            offset = Math.abs(offset);          //This method now makes sure crab stops at GUI edges.
+            x += offset;
+            display();
+        } else {
+            offset = Math.abs(offset);
+            x -= offset;
+            display();
+        }
     }
 }

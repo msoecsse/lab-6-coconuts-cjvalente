@@ -1,10 +1,14 @@
 package coconuts;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,6 +31,8 @@ public class Scoreboard extends VBox {
     private Thread timerThread;
     private boolean running = false;
     private final File scoreFile = new File("coconuts/Scores.txt");
+    private Timeline stopwatch;
+    private int elapsedSeconds;
 
     public Scoreboard() {
         this.coconutsDestroyed = 0;
@@ -55,6 +61,8 @@ public class Scoreboard extends VBox {
         this.getChildren().addAll(topRow, bottomRow);
         this.setAlignment(Pos.CENTER);
         this.setSpacing(10);
+        startTime();
+
 
     }
 
@@ -90,7 +98,34 @@ public class Scoreboard extends VBox {
             saveHighScore();
             System.out.println("Saved new highscore to file: " + highScore);
         }
+    }
 
+    public void startTime(){
+        if (running) {
+            return;
+        }
+        running = true;
+        elapsedSeconds = 0;
+        timeLabel.setText("Time: 0s");
 
+        stopwatch = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            elapsedSeconds++;
+            timeLabel.setText("Time: " + elapsedSeconds + "s");
+        }));
+        stopwatch.setCycleCount(Timeline.INDEFINITE);
+        stopwatch.play();
+    }
+
+    public void stopTimer() {
+        if (stopwatch != null) {
+            stopwatch.stop();
+            running = false;
+        }
+    }
+
+    public void resetTimer() {
+        stopTimer();
+        elapsedSeconds = 0;
+        timeLabel.setText("Time: 0s");
     }
 }
