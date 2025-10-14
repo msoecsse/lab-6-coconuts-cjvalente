@@ -18,7 +18,8 @@ public class Coconut extends HittableIslandObject implements HitEventObservers {
     }
 
     public void updateCoconutHitsGround(){
-        //make coconut disappear
+
+        //wait 1 second and then make coconut disappear
     }
 
     public void updateCrabDies(){
