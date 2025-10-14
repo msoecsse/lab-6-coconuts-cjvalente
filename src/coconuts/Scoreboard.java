@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 import java.time.Instant;
 import java.util.Scanner;
 
-public class Scoreboard extends VBox {
+public class Scoreboard extends VBox implements HitEventObservers{
     private Label scoreLabel;
     private int highScore;
     private int coconutsDestroyed;
@@ -91,6 +91,21 @@ public class Scoreboard extends VBox {
             System.out.println("Saved new highscore to file: " + highScore);
         }
 
+
+    }
+
+    @Override
+    public void updateCoconutHitsGround() {
+
+    }
+
+    @Override
+    public void updateCrabDies() {
+
+    }
+
+    @Override
+    public void updateCoconutDestoryed() {
 
     }
 }
