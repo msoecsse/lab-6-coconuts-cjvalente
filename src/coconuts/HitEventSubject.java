@@ -1,5 +1,8 @@
 package coconuts;
 
+import com.sun.javafx.scene.text.TextLayout;
+
+import java.util.ArrayList;
 import java.util.List;
 
 // An abstraction of all objects that can be hit by another object
@@ -9,6 +12,10 @@ import java.util.List;
 public class HitEventSubject {
     private List<HitEventObservers> observers;
 
+    public HitEventSubject() {
+        observers = new ArrayList<>();
+    }
+
     public void attach(HitEventObservers observer){
         observers.add(observer);
     }
@@ -17,36 +24,30 @@ public class HitEventSubject {
         observers.remove(observer);
     }
 
-    public void notifyObservers(int updateType){
+    public void notifyObservers(int updateType, HitEventObservers source){
         if(updateType == 1){
-            for(HitEventObservers observer : observers){
-                observer.updateCoconutHitsGround();
-            }
-        } else if(updateType == 2){
-            for(HitEventObservers observer : observers){
-                observer.updateCrabDies();
-            }
-        } else if(updateType == 3){
-            for(HitEventObservers observer : observers){
-                observer.updateCoconutDestroyed();
-            }
+            source.updateCoconutHitsGround();
+        } else if (updateType == 2) {
+            source.updateCrabDies();
+        } else if (updateType == 3) {
+            source.updateCoconutDestroyed();
         }
 
         //notify scoreboard to update, crab object, coconuts
     }
 
     //update scoreboard and make coconut disappear
-    public void coconutHitsGround(){
-        notifyObservers(1);
+    public void coconutHitsGround(HitEventObservers source){
+        notifyObservers(1,source);
     }
 
     //notify scoreboard (stop time), crab
-    public void crabDies(){
-        notifyObservers(2);
+    public void crabDies(HitEventObservers source){
+        notifyObservers(2, source);
     }
 
     //notify scoreboard, coconut, laser
-    public void coconutDestroyed(){
-        notifyObservers(3);
+    public void coconutDestroyed(HitEventObservers source){
+        notifyObservers(3, source);
     }
 }

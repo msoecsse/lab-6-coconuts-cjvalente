@@ -77,6 +77,6 @@ public abstract class IslandObject {
     public abstract void step();
 
     public boolean isObserver(){
-        return false;
+        return true;
     }
 }

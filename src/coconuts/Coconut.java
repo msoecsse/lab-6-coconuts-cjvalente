@@ -41,11 +41,6 @@ public class Coconut extends HittableIslandObject implements HitEventObservers {
 
     public void updateCoconutHitsGround() {
         y = game.getBeach().getY();
-        Timeline oneSecond = new Timeline(
-                new KeyFrame(Duration.seconds(1), _ -> {
-                })
-        );
-        oneSecond.play();
         game.scheduleForDeletion(this);
         //wait 1 second and then make coconut disappear
     }

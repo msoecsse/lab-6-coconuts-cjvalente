@@ -44,7 +44,7 @@ public class OhCoconutsGameManager {
             HittableIslandObject asHittable = (HittableIslandObject) object;
             hittableIslandSubjects.add(asHittable);
         }
-        if(object.isObserver()){
+        if(object instanceof HitEventObservers){
             subject.attach((HitEventObservers) object);
         }
     }
@@ -66,6 +66,7 @@ public class OhCoconutsGameManager {
             coconutsInFlight += 1;
             Coconut c = new Coconut(this, (int) (Math.random() * width));
             registerObject(c);
+            subject.attach(c);
             gamePane.getChildren().add(c.getImageView());
         }
         gameTick++;
@@ -87,6 +88,7 @@ public class OhCoconutsGameManager {
         for (IslandObject o : allObjects) {
             o.step();
             o.display();
+
         }
         // see if objects hit; the hit itself is something you will add
         // you can't change the lists while processing them, so collect
@@ -97,17 +99,17 @@ public class OhCoconutsGameManager {
                 if (thisObj.canHit(hittableObject) && thisObj.isTouching(hittableObject)) {
                     if(thisObj.isGround() && hittableObject.isFalling()){
                         //isGround asks for beach and isFalling is only true for coconuts
-                        subject.coconutHitsGround();
+                        subject.coconutHitsGround((HitEventObservers) hittableObject);
                         subject.detach((HitEventObservers)  hittableObject);
                     }
                     if(thisObj.isFalling() && (hittableObject.isGroundObject() && !hittableObject.isFalling())){
                         //asks if thisObj is coconut and hittableObject is crab
-                        subject.crabDies();
+                        subject.crabDies((HitEventObservers) hittableObject);
                         subject.detach((HitEventObservers)  hittableObject);
                     }
                     if(thisObj instanceof LaserBeam && hittableObject.isFalling()){
                         //asks if thisObj is laser and hittableobject is a coconut
-                        subject.coconutDestroyed();
+                        subject.coconutDestroyed((HitEventObservers) hittableObject);
                         subject.detach((HitEventObservers)  hittableObject);
                     }
                     scheduledForRemoval.add(hittableObject);
@@ -125,7 +127,14 @@ public class OhCoconutsGameManager {
         scheduledForRemoval.clear();
     }
 
+    public void addHitObserver(HitEventObservers o) {
+        subject.attach(o);
+    }
+
     public void scheduleForDeletion(IslandObject islandObject) {
+        if (islandObject instanceof HitEventObservers) {
+            subject.detach((HitEventObservers) islandObject);
+        }
         scheduledForRemoval.add(islandObject);
     }
 
