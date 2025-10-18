@@ -44,9 +44,6 @@ public class OhCoconutsGameManager {
             HittableIslandObject asHittable = (HittableIslandObject) object;
             hittableIslandSubjects.add(asHittable);
         }
-        if(object instanceof HitEventObservers){
-            subject.attach((HitEventObservers) object);
-        }
     }
 
     public int getHeight() {
@@ -66,7 +63,6 @@ public class OhCoconutsGameManager {
             coconutsInFlight += 1;
             Coconut c = new Coconut(this, (int) (Math.random() * width));
             registerObject(c);
-            subject.attach(c);
             gamePane.getChildren().add(c.getImageView());
         }
         gameTick++;
@@ -85,6 +81,7 @@ public class OhCoconutsGameManager {
     }
 
     public void advanceOneTick() {
+        scheduledForRemoval.clear();
         for (IslandObject o : allObjects) {
             o.step();
             o.display();
@@ -99,8 +96,9 @@ public class OhCoconutsGameManager {
                 if (thisObj.canHit(hittableObject) && thisObj.isTouching(hittableObject)) {
                     if(thisObj.isGround() && hittableObject.isFalling()){
                         //isGround asks for beach and isFalling is only true for coconuts
-                        subject.coconutHitsGround((HitEventObservers) hittableObject);
-                        subject.detach((HitEventObservers)  hittableObject);
+                        Coconut coconut = (Coconut) hittableObject;
+                        subject.coconutHitsGround(coconut);
+                        scheduledForRemoval.add(coconut);
                     }
                     if(thisObj.isFalling() && (hittableObject.isGroundObject() && !hittableObject.isFalling())){
                         //asks if thisObj is coconut and hittableObject is crab

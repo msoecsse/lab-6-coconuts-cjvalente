@@ -129,6 +129,14 @@ public class Scoreboard extends VBox implements HitEventObservers{
 
     @Override
     public void updateCoconutHitsGround() {
+        coconutsLanded++;
+        landedLabel.setText("Coconuts Landed: " + coconutsLanded);
+
+        if (coconutsLanded > highScore) {
+            setHighScore(coconutsLanded);
+            highScoreLabel.setText("High Score: " + highScore);
+            saveHighScore();
+        }
 
     }
 
@@ -139,6 +147,8 @@ public class Scoreboard extends VBox implements HitEventObservers{
 
     @Override
     public void updateCoconutDestroyed() {
+        coconutsDestroyed++;
+        destroyedLabel.setText("Coconuts Destroyed: " + coconutsDestroyed);
 
     }
 }

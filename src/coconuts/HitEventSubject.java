@@ -25,12 +25,17 @@ public class HitEventSubject {
     }
 
     public void notifyObservers(int updateType, HitEventObservers source){
-        if(updateType == 1){
-            source.updateCoconutHitsGround();
-        } else if (updateType == 2) {
-            source.updateCrabDies();
-        } else if (updateType == 3) {
-            source.updateCoconutDestroyed();
+        List<HitEventObservers> observersCopy = new ArrayList<>(observers);
+        for (HitEventObservers observer : observersCopy) {
+            if (observer != source) {
+                if (updateType == 1) {
+                    observer.updateCoconutHitsGround();
+                } else if (updateType == 2) {
+                    observer.updateCrabDies();
+                } else if (updateType == 3) {
+                    observer.updateCoconutDestroyed();
+                }
+            }
         }
 
         //notify scoreboard to update, crab object, coconuts
@@ -38,16 +43,19 @@ public class HitEventSubject {
 
     //update scoreboard and make coconut disappear
     public void coconutHitsGround(HitEventObservers source){
+        source.updateCoconutHitsGround();
         notifyObservers(1,source);
     }
 
     //notify scoreboard (stop time), crab
     public void crabDies(HitEventObservers source){
+        source.updateCrabDies();
         notifyObservers(2, source);
     }
 
     //notify scoreboard, coconut, laser
     public void coconutDestroyed(HitEventObservers source){
+        source.updateCoconutDestroyed();
         notifyObservers(3, source);
     }
 }

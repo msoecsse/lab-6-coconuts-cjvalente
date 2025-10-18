@@ -15,7 +15,7 @@ public class Coconut extends HittableIslandObject implements HitEventObservers {
 
     public Coconut(OhCoconutsGameManager game, int x) {
         super(game, x, 0, WIDTH, new Image("file:images/coco-1.png"));
-        coconutImage = new Image("file:images/coco-1.png");
+        this.coconutImage = new Image("file:images/coco-1.png");
         this.game = game;
     }
 
@@ -42,7 +42,6 @@ public class Coconut extends HittableIslandObject implements HitEventObservers {
     public void updateCoconutHitsGround() {
         y = game.getBeach().getY();
         game.scheduleForDeletion(this);
-        //wait 1 second and then make coconut disappear
     }
 
     public void updateCrabDies() {
@@ -51,10 +50,7 @@ public class Coconut extends HittableIslandObject implements HitEventObservers {
 
     public void updateCoconutDestroyed() {
         coconutImage = new Image("file:images/exploding_coco.png");
-        Timeline oneSecond = new Timeline(
-                new KeyFrame(Duration.seconds(1), _ -> {
-                })
-        );
+        Timeline oneSecond = new Timeline(new KeyFrame(Duration.seconds(1), _ -> {}));
         oneSecond.play();
         game.scheduleForDeletion(this);
 

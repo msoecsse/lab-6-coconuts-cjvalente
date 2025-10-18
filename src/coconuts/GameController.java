@@ -47,6 +47,7 @@ public class GameController {
         scoreboard.setLayoutY(10);
         scoreboardContainer.setPrefHeight(100);
         scoreboardContainer.getChildren().add(scoreboard);
+        theGame.addHitObserver(scoreboard);
 
 
         coconutTimeline = new Timeline(new KeyFrame(Duration.millis(MILLISECONDS_PER_STEP), (e) -> {
