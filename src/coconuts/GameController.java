@@ -67,9 +67,14 @@ public class GameController {
                 coconutTimeline.play();
                 started = true;
                 scoreboard.startTime();
+            } else if (theGame.getIsGameOver()) {
+                coconutTimeline.pause();
+                started = true;
+                scoreboard.stopTimer();
             } else {
                 coconutTimeline.pause();
                 started = false;
+                scoreboard.pauseTimer();
             }
         }
     }
@@ -92,6 +97,10 @@ public class GameController {
                 }
                 if (pressedKeys.contains(KeyCode.LEFT)) {
                     crab.crawl(-speed);
+                }
+
+                if (pressedKeys.contains(KeyCode.UP)) {
+                    theGame.laserShot(theGame.getCrab().shootLaser());
                 }
             }
         };

@@ -19,6 +19,7 @@ public class OhCoconutsGameManager {
     private Pane gamePane;
     private Crab theCrab;
     private Beach theBeach;
+    private boolean isGameOver;
     /* game play */
     private int coconutsInFlight = 0;
     private int gameTick = 0;
@@ -27,6 +28,7 @@ public class OhCoconutsGameManager {
         this.height = height;
         this.width = width;
         this.gamePane = gamePane;
+        this.isGameOver = false;
 
         this.theCrab = new Crab(this, height, width);
         registerObject(theCrab);
@@ -48,6 +50,10 @@ public class OhCoconutsGameManager {
 
     public int getHeight() {
         return height;
+    }
+
+    public boolean getIsGameOver(){
+        return isGameOver;
     }
 
     public int getWidth() {
@@ -77,7 +83,13 @@ public class OhCoconutsGameManager {
     }
 
     public void killCrab() {
-        theCrab.setImage();
+        scheduleForDeletion(theCrab);
+        theCrab = null;
+    }
+
+    public void laserShot(LaserBeam laser){
+        gamePane.getChildren().add(laser.getImageView());
+        registerObject(laser);
     }
 
     public void advanceOneTick() {
@@ -104,6 +116,8 @@ public class OhCoconutsGameManager {
                         //asks if thisObj is coconut and hittableObject is crab
                         subject.crabDies((HitEventObservers) hittableObject);
                         subject.detach((HitEventObservers)  hittableObject);
+                        isGameOver = true;
+                        killCrab();
                     }
                     if(thisObj instanceof LaserBeam && hittableObject.isFalling()){
                         //asks if thisObj is laser and hittableobject is a coconut

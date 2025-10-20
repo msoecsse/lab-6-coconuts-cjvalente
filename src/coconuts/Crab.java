@@ -8,9 +8,13 @@ import javafx.scene.image.Image;
 public class Crab extends HittableIslandObject implements HitEventObservers{
     private static final int WIDTH = 50; // assumption: height and width are the same
     private static Image crabImage = new Image("file:images/crab-1.png");
+    private OhCoconutsGameManager game;
+    private int laserShootingHeight;
 
     public Crab(OhCoconutsGameManager game, int skyHeight, int islandWidth) {
         super(game, islandWidth / 2, skyHeight, WIDTH, crabImage);
+        this.game = game;
+        laserShootingHeight = skyHeight;
     }
 
     @Override
@@ -32,6 +36,10 @@ public class Crab extends HittableIslandObject implements HitEventObservers{
             x -= offset;
             display();
         }
+    }
+
+    public LaserBeam shootLaser(){
+        return new LaserBeam(game, laserShootingHeight, x);
     }
 
     @Override

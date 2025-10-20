@@ -29,16 +29,18 @@ public class Scoreboard extends VBox implements HitEventObservers{
     private Label timeLabel;
     private Instant startTime;
     private Thread timerThread;
-    private boolean running = false;
-    private final File scoreFile = new File("coconuts/Scores.txt");
+    private boolean paused = false;
+    private static final File scoreFile = new File("Scores.txt");
     private Timeline stopwatch;
     private int elapsedSeconds;
+    private boolean running;
 
     public Scoreboard() {
         this.coconutsDestroyed = 0;
         this.coconutsLanded = 0;
         this.highScore = loadHighScore();
         this.timeInMillis = 0;
+        this.running = false;
         buildScoreboard();
     }
 
@@ -99,25 +101,31 @@ public class Scoreboard extends VBox implements HitEventObservers{
     }
 
     public void startTime(){
-        if (running) {
-            return;
-        }
         running = true;
-        elapsedSeconds = 0;
-        timeLabel.setText("Time: 0s");
+        if(!paused) {
+            paused = false;
+            elapsedSeconds = 0;
+            timeLabel.setText("Time: 0s");
 
-        stopwatch = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            elapsedSeconds++;
-            timeLabel.setText("Time: " + elapsedSeconds + "s");
-        }));
-        stopwatch.setCycleCount(Timeline.INDEFINITE);
+            stopwatch = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+                elapsedSeconds++;
+                timeLabel.setText("Time: " + elapsedSeconds + "s");
+            }));
+            stopwatch.setCycleCount(Timeline.INDEFINITE);
+        }
         stopwatch.play();
+    }
+
+    public void pauseTimer(){
+        if (stopwatch != null) {
+            stopwatch.stop();
+            paused = true;
+        }
     }
 
     public void stopTimer() {
         if (stopwatch != null) {
             stopwatch.stop();
-            running = false;
         }
     }
 
@@ -129,20 +137,16 @@ public class Scoreboard extends VBox implements HitEventObservers{
 
     @Override
     public void updateCoconutHitsGround() {
-        coconutsLanded++;
-        landedLabel.setText("Coconuts Landed: " + coconutsLanded);
-
-        if (coconutsLanded > highScore) {
-            setHighScore(coconutsLanded);
-            highScoreLabel.setText("High Score: " + highScore);
-            saveHighScore();
+        if(running) {
+            coconutsLanded++;
+            landedLabel.setText("Coconuts Landed: " + coconutsLanded);
         }
-
     }
 
     @Override
     public void updateCrabDies() {
-
+        stopTimer();
+        running = false;
     }
 
     @Override
@@ -150,5 +154,12 @@ public class Scoreboard extends VBox implements HitEventObservers{
         coconutsDestroyed++;
         destroyedLabel.setText("Coconuts Destroyed: " + coconutsDestroyed);
 
+        if (coconutsDestroyed > highScore) {
+            setHighScore(coconutsDestroyed);
+            highScoreLabel.setText("High Score: " + highScore);
+            if(!running) {
+                saveHighScore();
+            }
+        }
     }
 }
