@@ -56,6 +56,18 @@ public class GameController {
             if (theGame.done())
                 coconutTimeline.pause();
         }));
+
+        if (theGame.getIsGameOver()|| theGame.done()) {
+            coconutTimeline.stop();
+            scoreboard.stopTimer();
+            scoreboard.pauseTimer();
+
+            int currentScore = scoreboard.getCoconutsDestroyed();
+            if (currentScore > scoreboard.getHighScore()) {
+                scoreboard.setHighScore(currentScore);
+                System.out.println("NEW HIGH SCORE!");
+            }
+        }
         coconutTimeline.setCycleCount(Timeline.INDEFINITE);
         setupMovementHandlers();
     }

@@ -18,7 +18,7 @@ import java.util.Scanner;
 
 public class Scoreboard extends VBox implements HitEventObservers{
     private Label scoreLabel;
-    private int highScore;
+    private int highScore = getHighScore();
     private int coconutsDestroyed;
     private int coconutsLanded;
     private long timeInMillis;
@@ -30,7 +30,7 @@ public class Scoreboard extends VBox implements HitEventObservers{
     private Instant startTime;
     private Thread timerThread;
     private boolean paused = false;
-    private static final File scoreFile = new File("Scores.txt");
+    private static final File scoreFile = new File("C:\\Users\\valentec\\IdeaProjects\\lab-1-checkers-cjvalente9\\lab-1-checkers-cjvalente9\\lab-6-coconuts-cjvalente\\src\\coconuts\\Scores.txt");
     private Timeline stopwatch;
     private int elapsedSeconds;
     private boolean running;
@@ -38,7 +38,7 @@ public class Scoreboard extends VBox implements HitEventObservers{
     public Scoreboard() {
         this.coconutsDestroyed = 0;
         this.coconutsLanded = 0;
-        this.highScore = loadHighScore();
+        loadHighScore();
         this.timeInMillis = 0;
         this.running = false;
         buildScoreboard();
@@ -80,10 +80,10 @@ public class Scoreboard extends VBox implements HitEventObservers{
     }
 
     public int getHighScore() {
-        return highScore;
+        return loadHighScore();
     }
 
-    private void saveHighScore() {
+    public void saveHighScore() {
         try (PrintWriter pw = new PrintWriter(scoreFile)) {
             pw.println(highScore);
         } catch (FileNotFoundException e) {
@@ -161,5 +161,9 @@ public class Scoreboard extends VBox implements HitEventObservers{
                 saveHighScore();
             }
         }
+    }
+
+    public int getCoconutsDestroyed() {
+        return coconutsDestroyed;
     }
 }
