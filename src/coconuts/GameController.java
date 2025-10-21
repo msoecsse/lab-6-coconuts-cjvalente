@@ -33,6 +33,7 @@ public class GameController {
     private HBox scoreboardContainer;
     private OhCoconutsGameManager theGame;
     private Scoreboard scoreboard;
+    private long lastShotTime = 0;
 
     private final Set<KeyCode> pressedKeys = new HashSet<>();
     private AnimationTimer movementTimer;
@@ -106,20 +107,24 @@ public class GameController {
                 }
 
                 if (pressedKeys.contains(KeyCode.UP)) {
-                    LaserBeam laser = crab.shootLaser();
-                    Rectangle rect = new Rectangle(4, 20, Color.RED);
-                    rect.setLayoutX(laser.getX());
-                    rect.setLayoutY(laser.getY());
-                    gamePane.getChildren().add(rect);
-                    Timeline laserTimeline = new Timeline(new KeyFrame(Duration.millis(16), e -> {
-                        laser.step();
+                    now = System.currentTimeMillis();
+                    if (now - lastShotTime >= 500) {
+                        lastShotTime = now;
+                        LaserBeam laser = crab.shootLaser();
+                        Rectangle rect = new Rectangle(4, 20, Color.RED);
+                        rect.setLayoutX(laser.getX());
                         rect.setLayoutY(laser.getY());
-                        if (laser.shouldBeRemoved()) {
-                            gamePane.getChildren().remove(rect);
-                        }
-                    }));
-                    laserTimeline.setCycleCount(Timeline.INDEFINITE);
-                    laserTimeline.play();
+                        gamePane.getChildren().add(rect);
+                        Timeline laserTimeline = new Timeline(new KeyFrame(Duration.millis(16), e -> {
+                            laser.step();
+                            rect.setLayoutY(laser.getY());
+                            if (laser.shouldBeRemoved()) {
+                                gamePane.getChildren().remove(rect);
+                            }
+                        }));
+                        laserTimeline.setCycleCount(Timeline.INDEFINITE);
+                        laserTimeline.play();
+                    }
                 }
             }
         };
