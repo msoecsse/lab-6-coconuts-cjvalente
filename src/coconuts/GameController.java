@@ -8,6 +8,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.HashSet;
@@ -33,7 +35,6 @@ public class GameController {
     private Scoreboard scoreboard;
 
     private final Set<KeyCode> pressedKeys = new HashSet<>();
-
     private AnimationTimer movementTimer;
 
     @FXML
@@ -57,17 +58,7 @@ public class GameController {
                 coconutTimeline.pause();
         }));
 
-        if (theGame.getIsGameOver()|| theGame.done()) {
-            coconutTimeline.stop();
-            scoreboard.stopTimer();
-            scoreboard.pauseTimer();
 
-            int currentScore = scoreboard.getCoconutsDestroyed();
-            if (currentScore > scoreboard.getHighScore()) {
-                scoreboard.setHighScore(currentScore);
-                System.out.println("NEW HIGH SCORE!");
-            }
-        }
         coconutTimeline.setCycleCount(Timeline.INDEFINITE);
         setupMovementHandlers();
     }
@@ -87,8 +78,11 @@ public class GameController {
                 coconutTimeline.pause();
                 started = false;
                 scoreboard.pauseTimer();
+
             }
         }
+
+
     }
 
     private void setupMovementHandlers() {
@@ -112,7 +106,20 @@ public class GameController {
                 }
 
                 if (pressedKeys.contains(KeyCode.UP)) {
-                    theGame.laserShot(theGame.getCrab().shootLaser());
+                    LaserBeam laser = crab.shootLaser();
+                    Rectangle rect = new Rectangle(4, 20, Color.RED);
+                    rect.setLayoutX(laser.getX());
+                    rect.setLayoutY(laser.getY());
+                    gamePane.getChildren().add(rect);
+                    Timeline laserTimeline = new Timeline(new KeyFrame(Duration.millis(16), e -> {
+                        laser.step();
+                        rect.setLayoutY(laser.getY());
+                        if (laser.shouldBeRemoved()) {
+                            gamePane.getChildren().remove(rect);
+                        }
+                    }));
+                    laserTimeline.setCycleCount(Timeline.INDEFINITE);
+                    laserTimeline.play();
                 }
             }
         };

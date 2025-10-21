@@ -4,6 +4,7 @@ package coconuts;
 
 import javafx.scene.layout.Pane;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -12,6 +13,7 @@ public class OhCoconutsGameManager {
     private final Collection<IslandObject> allObjects = new LinkedList<>();
     private final Collection<HittableIslandObject> hittableIslandSubjects = new LinkedList<>();
     private final Collection<IslandObject> scheduledForRemoval = new LinkedList<>();
+    private final Collection<LaserBeam> lasers = new ArrayList<>();
     private final HitEventSubject subject = new HitEventSubject();
     private final int height, width;
     private final int DROP_INTERVAL = 10;
@@ -119,7 +121,7 @@ public class OhCoconutsGameManager {
                         isGameOver = true;
                         killCrab();
                     }
-                    if(thisObj instanceof LaserBeam && hittableObject.isFalling()){
+                    if(thisObj.isLaser() && hittableObject.isFalling()){
                         //asks if thisObj is laser and hittableobject is a coconut
                         subject.coconutDestroyed((HitEventObservers) hittableObject);
                         subject.detach((HitEventObservers)  hittableObject);
@@ -132,7 +134,7 @@ public class OhCoconutsGameManager {
         // actually remove the objects as needed
         for (IslandObject thisObj : scheduledForRemoval) {
             allObjects.remove(thisObj);
-            if (thisObj instanceof HittableIslandObject) {
+            if (thisObj.isHittable()) {
                 hittableIslandSubjects.remove((HittableIslandObject) thisObj);
             }
         }
@@ -144,7 +146,7 @@ public class OhCoconutsGameManager {
     }
 
     public void scheduleForDeletion(IslandObject islandObject) {
-        if (islandObject instanceof HitEventObservers) {
+        if (islandObject.isHittable()) {
             subject.detach((HitEventObservers) islandObject);
         }
         scheduledForRemoval.add(islandObject);
@@ -153,4 +155,6 @@ public class OhCoconutsGameManager {
     public boolean done() {
         return coconutsInFlight == 0 && gameTick >= MAX_TIME;
     }
+
+
 }

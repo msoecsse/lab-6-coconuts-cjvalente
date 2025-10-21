@@ -79,4 +79,16 @@ public abstract class IslandObject {
     public boolean isObserver(){
         return true;
     }
+
+    public boolean shouldBeRemoved() {
+        return false;
+    }
+
+    public boolean isLaser() {
+        return false;
+    }
+
+    public boolean isCrab() {
+        return false;
+    }
 }

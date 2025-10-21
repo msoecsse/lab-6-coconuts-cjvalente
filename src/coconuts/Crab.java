@@ -39,13 +39,20 @@ public class Crab extends HittableIslandObject implements HitEventObservers{
     }
 
     public LaserBeam shootLaser(){
-        return new LaserBeam(game, laserShootingHeight, x);
+        if (game != null) {
+            int crabCenterX = x + width / 2;
+            int eyeHeight = y - 10;
+            return new LaserBeam(game, eyeHeight, crabCenterX);
+        }
+        return null;
     }
 
     @Override
     public boolean isGroundObject() {
         return true;
     }
+
+
 
     @Override
     public void updateCoconutHitsGround() {
@@ -56,12 +63,19 @@ public class Crab extends HittableIslandObject implements HitEventObservers{
     public void updateCrabDies() {
         System.out.println("CRAB DIES");
 
+
+    }
+
+    @Override
+    public boolean isCrab() {
+        return true;
     }
 
     @Override
     public void updateCoconutDestroyed() {
 
     }
+
 
     public Image getImage() {
         return crabImage;

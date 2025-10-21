@@ -10,6 +10,7 @@ public class LaserBeam extends IslandObject implements HitEventObservers{
 
     public LaserBeam(OhCoconutsGameManager game, int eyeHeight, int crabCenterX) {
         super(game, crabCenterX, eyeHeight, WIDTH, laserImage);
+
     }
 
     public int hittable_height() {
@@ -40,4 +41,16 @@ public class LaserBeam extends IslandObject implements HitEventObservers{
     @Override
     public void updateCoconutDestroyed() {
     }
+
+    @Override
+    public boolean shouldBeRemoved() {
+        return y + WIDTH < 0;
+    }
+
+    @Override
+    public boolean isLaser() {
+        return true;
+    }
+
+
 }

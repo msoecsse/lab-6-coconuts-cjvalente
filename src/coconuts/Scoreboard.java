@@ -17,30 +17,26 @@ import java.time.Instant;
 import java.util.Scanner;
 
 public class Scoreboard extends VBox implements HitEventObservers{
-    private Label scoreLabel;
-    private int highScore = getHighScore();
+    private int highScore;
     private int coconutsDestroyed;
     private int coconutsLanded;
-    private long timeInMillis;
-    private int time_seconds;
-    private Label destroyedLabel;
-    private Label landedLabel;
-    private Label highScoreLabel;
-    private Label timeLabel;
-    private Instant startTime;
-    private Thread timerThread;
-    private boolean paused = false;
-    private static final File scoreFile = new File("C:\\Users\\valentec\\IdeaProjects\\lab-1-checkers-cjvalente9\\lab-1-checkers-cjvalente9\\lab-6-coconuts-cjvalente\\src\\coconuts\\Scores.txt");
-    private Timeline stopwatch;
     private int elapsedSeconds;
     private boolean running;
+    private boolean paused = false;
+
+    private Label destroyedLabel;
+    private Label landedLabel;
+    public Label highScoreLabel; // made public so GameController can refresh it
+    private Label timeLabel;
+
+    private Timeline stopwatch;
+    private static final File scoreFile = new File(System.getProperty("user.dir"), "Scores.txt");
 
     public Scoreboard() {
         this.coconutsDestroyed = 0;
         this.coconutsLanded = 0;
-        loadHighScore();
-        this.timeInMillis = 0;
         this.running = false;
+        this.highScore = loadHighScore();
         buildScoreboard();
     }
 
@@ -67,27 +63,26 @@ public class Scoreboard extends VBox implements HitEventObservers{
     }
 
     public int loadHighScore() {
-        int score = 0;
+        System.out.println("Loading high score from: " + scoreFile.getAbsolutePath());
+        if (!scoreFile.exists()) return 0;
         try (Scanner scanner = new Scanner(scoreFile)) {
-            if (scanner.hasNextInt()) {
-                score = scanner.nextInt();
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading high score: " + e.getMessage());
+            return scanner.hasNextInt() ? scanner.nextInt() : 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
         }
-
-        return score;
     }
 
     public int getHighScore() {
-        return loadHighScore();
+        return highScore;
     }
 
     public void saveHighScore() {
+        System.out.println("Saving high score to: " + scoreFile.getAbsolutePath());
         try (PrintWriter pw = new PrintWriter(scoreFile)) {
             pw.println(highScore);
-        } catch (FileNotFoundException e) {
-            System.err.println("Error writing high score to file: " + highScore);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -95,8 +90,9 @@ public class Scoreboard extends VBox implements HitEventObservers{
     public void setHighScore(int score) {
         if (score > highScore) {
             highScore = score;
+            highScoreLabel.setText("High Score: " + highScore);
             saveHighScore();
-            System.out.println("Saved new highscore to file: " + highScore);
+            System.out.println("New high score: " + highScore);
         }
     }
 
@@ -156,10 +152,6 @@ public class Scoreboard extends VBox implements HitEventObservers{
 
         if (coconutsDestroyed > highScore) {
             setHighScore(coconutsDestroyed);
-            highScoreLabel.setText("High Score: " + highScore);
-            if(!running) {
-                saveHighScore();
-            }
         }
     }
 
