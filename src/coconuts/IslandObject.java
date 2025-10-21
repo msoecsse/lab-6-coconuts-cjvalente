@@ -63,7 +63,7 @@ public abstract class IslandObject {
     }
 
     public boolean canHit(IslandObject other) {
-        return false; //TODO update this in each class
+        return false;
     }
 
     public boolean isGround(){

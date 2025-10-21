@@ -111,6 +111,7 @@ public class GameController {
                     if (now - lastShotTime >= 500) {
                         lastShotTime = now;
                         LaserBeam laser = crab.shootLaser();
+                        theGame.laserShot(laser);
                         Rectangle rect = new Rectangle(4, 20, Color.RED);
                         rect.setLayoutX(laser.getX());
                         rect.setLayoutY(laser.getY());

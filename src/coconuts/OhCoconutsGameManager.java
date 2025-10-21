@@ -91,6 +91,7 @@ public class OhCoconutsGameManager {
 
     public void laserShot(LaserBeam laser){
         gamePane.getChildren().add(laser.getImageView());
+        lasers.add(laser);
         registerObject(laser);
     }
 
@@ -122,9 +123,12 @@ public class OhCoconutsGameManager {
                         killCrab();
                     }
                     if(thisObj.isLaser() && hittableObject.isFalling()){
+                        System.out.println("laser hit coconut");
                         //asks if thisObj is laser and hittableobject is a coconut
                         subject.coconutDestroyed((HitEventObservers) hittableObject);
                         subject.detach((HitEventObservers)  hittableObject);
+                        scheduledForRemoval.add(hittableObject);
+                        gamePane.getChildren().remove(hittableObject.getImageView());
                     }
                     scheduledForRemoval.add(hittableObject);
                     gamePane.getChildren().remove(hittableObject.getImageView());
