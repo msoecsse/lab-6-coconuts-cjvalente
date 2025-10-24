@@ -1,3 +1,4 @@
+//done by CJ
 package coconuts;
 
 import javafx.animation.KeyFrame;
@@ -10,10 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.Instant;
 import java.util.Scanner;
 
 public class Scoreboard extends VBox implements HitEventObservers{

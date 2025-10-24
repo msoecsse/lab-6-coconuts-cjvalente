@@ -1,3 +1,4 @@
+//Method overrides done by Zoe
 package coconuts;
 
 // the beach catches (hits) coconuts and increases the coconut score

@@ -1,3 +1,5 @@
+//Done by both, most of implementation done by CJ
+//the isTouching method for destroying coconuts done by Zoe
 package coconuts;
 
 import javafx.scene.image.Image;

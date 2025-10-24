@@ -1,3 +1,4 @@
+//done by CJ
 package coconuts;
 
 import javafx.scene.image.Image;
@@ -8,18 +9,22 @@ import javafx.scene.image.Image;
 public class Crab extends HittableIslandObject implements HitEventObservers{
     private static final int WIDTH = 50; // assumption: height and width are the same
     private static Image crabImage = new Image("file:images/crab-1.png");
-    private OhCoconutsGameManager game;
-    private int laserShootingHeight;
+    private final OhCoconutsGameManager game;
 
     public Crab(OhCoconutsGameManager game, int skyHeight, int islandWidth) {
         super(game, islandWidth / 2, skyHeight, WIDTH, crabImage);
         this.game = game;
-        laserShootingHeight = skyHeight;
     }
 
     @Override
     public void step() {
         // do nothing
+    }
+
+    public boolean isTouching(IslandObject other) {
+        return  this.y == other.y
+                && this.x < other.x + other.width &&
+                this.x + this.width > other.x;
     }
 
     // Captures the crab crawling sideways

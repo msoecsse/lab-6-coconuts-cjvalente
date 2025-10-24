@@ -1,3 +1,4 @@
+//Done by CJ and Zoe
 package coconuts;
 
 // https://stackoverflow.com/questions/42443148/how-to-correctly-separate-view-from-model-in-javafx
@@ -18,9 +19,9 @@ public class OhCoconutsGameManager {
     private final int height, width;
     private final int DROP_INTERVAL = 10;
     private final int MAX_TIME = 100;
-    private Pane gamePane;
+    private final Pane gamePane;
     private Crab theCrab;
-    private Beach theBeach;
+    private final Beach theBeach;
     private boolean isGameOver;
     /* game play */
     private int coconutsInFlight = 0;
